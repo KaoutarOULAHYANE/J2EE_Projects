@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Patients</title>
+    <link rel="stylesheet" type="text/css" href="/webjars/bootstrap/4.4.1-1/css/bootstrap.min.css">
+</head>
+<body>
+    <div th:include="navBar.html"></div>
+    <div class="container mt-5">
+        <div class="card">
+            <div class="card-header">
+                Recherche des patients
+            </div>
+            <div class="card-body">
+                <form th:action="@{patients}" th:method="get">
+                    <div>
+                        <label>Mot clé</label>
+                        <input type="text" name="motCle"/>
+                        <button class="btn btn-info">Chercher</button>
+                    </div>
+                </form>
+
+                <table class="table mt-5">
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Date de naissance</th>
+                        <th>Malade ?</th>
+                    </tr>
+                    <tr th:each="patient:${patients}">
+                        <td th:text="${patient.id}"></td>
+                        <td th:text="${patient.name}"></td>
+                        <td th:text="${patient.dateNaissance}"></td>
+                        <td th:text="${patient.malade} ? 'oui' : 'non'"></td>
+                        <td><a class="btn btn-danger" th:href="@{deletePatient(id=${patient.id})}" onclick="return confirm('Etes vous sur ?')">Delete</a></td>
+                        <td><a class="btn btn-success" th:href="@{updatePage(id=${patient.id})}">Update</a></td>
+                    </tr>
+                    </tr>
+                </table>
+                <ul class="nav nav-pills">
+                    <li th:each="page,status:${pages}">
+                        <a th:class="${status.index==currentPage} ? 'btn btn-info' : 'btn'"
+                           th:href="@{patients(page=${status.index},size=5,motCle=${motCle})}" th:text="${status.index}"></a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
